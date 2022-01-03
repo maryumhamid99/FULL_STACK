@@ -15,9 +15,9 @@ const App = () => {
     setSelected(idx);
   };
 
-  const Votes = () => {
-    setVotes({ 
-      [selected]: votes[selected] + 1,
+  const Vote = () => {
+    setVote({ 
+      [selected]: vote[selected] + 1,
     });
   };
 
@@ -33,7 +33,7 @@ const App = () => {
   ]
    
   const [selected, setSelected] = useState(0)
-  const [votes, setVotes] = useState({
+  const [vote, setVote] = useState({
     0: 0,
     1: 0,
     2: 0,
@@ -42,7 +42,7 @@ const App = () => {
     5: 0,
   });
 
-  const mostVoted = Object.keys(votes).sort((a, b) => votes[b] - votes[a])[0];
+  const maxVotes = Object.keys(vote).sort((a, b) => vote[b] - vote[a])[0];
 
   return (
     <div>
@@ -50,14 +50,14 @@ const App = () => {
       <Anecdote
         title={"Anecdote of the day"}
         anecdote={anecdotes[selected]}
-        numVotes={votes[selected]}
+        numVotes={vote[selected]}
       />
       <button onClick={handleNextAnecdote}>Next anecdote</button>
-      <button onClick={Votes}>Vote</button>
+      <button onClick={Vote}>Vote</button>
       <Anecdote
         title={"Anecdote with most votes"}
-        anecdote={anecdotes[mostVoted]}
-        numVotes={votes[mostVoted]}
+        anecdote={anecdotes[maxVotes]}
+        numVotes={vote[maxVotes]}
       />
     </div>
     </div>
