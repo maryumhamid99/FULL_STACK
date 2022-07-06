@@ -8,18 +8,34 @@ const App = () => {
   const [persons, setPersons] = useState([{ name: 'Arto Hellas' , number: '39-44-5323523' },{ name: 'Ada Lovelace', number: '39-44-5323523' }, { name: 'Dan Abramov', number: '12-43-234345' }, { name: 'Mary Poppendieck', number: '39-23-6423122' }])
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
-
+  const data_url = 'http://localhost:3001/persons'
 
     const addName = (event) => {
       event.preventDefault()
       if (persons.filter( person => person.name === newName ).length > 0){
         alert(`${newName} is already added to phonebook.`);
-        return
+        }
+      else{
+
+        const newObject = {
+          'name': newName,
+          'number': newNumber,
+          'id': persons.length+1
+        }
+
+        axios.post(data_url, newObject )
+        .then( response =>{
+          setPersons( persons.concat(response.data) ) 
+          setNewName('')
+          setNewNumber("")
+        })
       }
-      setPersons( persons.concat( {name: newName, number: newNumber} ))
-      setNewName("")
-      setNewNumber("")
     }
+
+
+    
+            
+
 
     useEffect( () =>
     {
