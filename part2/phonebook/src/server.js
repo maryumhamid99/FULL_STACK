@@ -16,5 +16,10 @@ const deleteEntry = (id) => {
         .catch( error => console.log("Failed to delete", error) )
   }
 
-const exports = {addEntry, getAll, deleteEntry}
+
+const updateEntry = (id, person) => {
+    return axios.put(`${baseUrl}/${id}`, person)
+        .then(response => response.data)
+}
+const exports = {addEntry, getAll, deleteEntry,updateEntry}
 export default exports

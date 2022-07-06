@@ -11,48 +11,46 @@ const App = () => {
   const [newNumber, setNewNumber] = useState('')
   const data_url = 'http://localhost:3001/persons'
 
-    const addName = (event) => {
-      event.preventDefault()
-      if (persons.filter( person => person.name === newName ).length > 0){
-        alert(`${newName} is already added to phonebook.`);
-        }
-      else{
-
-        const newObject = {
-          'name': newName,
-          'number': newNumber,
-          'id': persons.length+1
-        }
-
-        phonebookService.addEntry( {name: newName, number: newNumber} )
-            .then( newPerson => setPersons( persons.concat(newPerson) ) 
-          )
-          setNewName("")
-          setNewNumber("")
+  const addName = (event) => {
+    event.preventDefault()
+    const data = {name: newName, number: newNumber}
+      const duplicates = persons.filter(p => p.name === newName)
+      if (
+          duplicates.length >= 1 &&
+          window.confirm(`${duplicates[0].name} is already added to phonebook, replace the old number with a new one?`)
+      ){
+          phonebookService.updateEntry(duplicates[0].id, data)
+              .then( updatedPerson => setPersons( persons.map( p => p.id === duplicates[0].id ? updatedPerson : p ) ) )
+      }else {
+          phonebookService.addEntry( data )
+              .then( newPerson => setPersons( persons.concat(newPerson) ) )
       }
-    }
-    const removeName = (id) => {
-      const person = persons.find( p => p.id === id )
-      if ( window.confirm(`Delete ${person.name}?`) )
-          phonebookService.deleteEntry(id)
-              .then( response => setPersons( persons.filter(p => p.id !== id)) )
-    }
 
-    
-            
+      phonebookService.addEntry( {name: newName, number: newNumber} )
+          .then( newPerson => setPersons( persons.concat(newPerson) ) 
+        )
+        setNewName("")
+        setNewNumber("")
+  }
 
+  const removeName = (id) => {
+    const person = persons.find( p => p.id === id )
+    if ( window.confirm(`Delete ${person.name}?`) )
+        phonebookService.deleteEntry(id)
+            .then( response => setPersons( persons.filter(p => p.id !== id)) )
+  }
+        
+  useEffect( () =>
+  {
+    Service.getAll().then(allEntries => setPersons(allEntries))
+  }, [])
 
-    useEffect( () =>
-    {
-      Service.getAll().then(allEntries => setPersons(allEntries))
-    }, [])
-
-    const handleNewNameChange = (event) => setNewName(event.target.value)
-    const handleNewNumberChange = (event) => setNewNumber(event.target.value)
-    const handleFilterChange = (event) => {
-      setFilterName(event.target.value)
-    }
-    const personsShow = persons.filter( person => person.name.toLowerCase().startsWith(filter.toLowerCase()) )
+  const handleNewNameChange = (event) => setNewName(event.target.value)
+  const handleNewNumberChange = (event) => setNewNumber(event.target.value)
+  const handleFilterChange = (event) => {
+    setFilterName(event.target.value)
+  }
+  const personsShow = persons.filter( person => person.name.toLowerCase().startsWith(filter.toLowerCase()) )
 
 
 
