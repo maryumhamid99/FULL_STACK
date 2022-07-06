@@ -1,4 +1,5 @@
 import axios from 'axios'
+import Service from "./server"
 import React, { useState , useEffect} from 'react'
 import Filter from "./components/Filter";
 import PersonForm from "./components/PersonForm";
@@ -23,12 +24,11 @@ const App = () => {
           'id': persons.length+1
         }
 
-        axios.post(data_url, newObject )
-        .then( response =>{
-          setPersons( persons.concat(response.data) ) 
-          setNewName('')
+        phonebookService.addEntry( {name: newName, number: newNumber, id: persons.length+1} )
+            .then( newPerson => setPersons( persons.concat(newPerson) ) 
+          )
+          setNewName("")
           setNewNumber("")
-        })
       }
     }
 
@@ -39,7 +39,7 @@ const App = () => {
 
     useEffect( () =>
     {
-      axios.get("http://localhost:3001/persons").then( response => setPersons(response.data) )
+      Service.getAll().then(allEntries => setPersons(allEntries))
     }, [])
 
     const handleNewNameChange = (event) => setNewName(event.target.value)
