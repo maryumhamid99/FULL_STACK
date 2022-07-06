@@ -24,14 +24,19 @@ const App = () => {
           'id': persons.length+1
         }
 
-        phonebookService.addEntry( {name: newName, number: newNumber, id: persons.length+1} )
+        phonebookService.addEntry( {name: newName, number: newNumber} )
             .then( newPerson => setPersons( persons.concat(newPerson) ) 
           )
           setNewName("")
           setNewNumber("")
       }
     }
-
+    const removeName = (id) => {
+      const person = persons.find( p => p.id === id )
+      if ( window.confirm(`Delete ${person.name}?`) )
+          phonebookService.deleteEntry(id)
+              .then( response => setPersons( persons.filter(p => p.id !== id)) )
+    }
 
     
             
@@ -59,7 +64,8 @@ const App = () => {
         <h3>add a new</h3>
         <PersonForm handleNameChange={handleNameChange} handleNumberChange={handleNumberChange} newNumber={newNumber} newName={newName} addName={addName} />
         <h2>Numbers</h2>
-        <Persons personsShow={personsShow}/>
+        <Persons personsShow={personsShow}
+        deleteHandler={removeName}/>
       </div>
   )
 }
