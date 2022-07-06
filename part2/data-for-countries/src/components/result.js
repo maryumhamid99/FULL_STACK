@@ -1,34 +1,37 @@
-import axios from 'axios'
-import React, { useEffect } from 'react'
-
 import { Country } from './Country'
 
-const Result = (props) => {
-  const { countries, setCountries, searchName } = props
+const Filter = (props) => {
+  const { countries, searchName, countryDisp, showFlag } = props
 
-  const url = `https://restcountries.eu/rest/v2/name/${searchName}`
+  if (searchName) {
+    if (countries.length === 1) {
+      return (
+        <div>
+          <Country country={countries[0]} countryDisp={countryDisp} showFlag={showFlag} />
+        </div>
+      )
+    } else if (countries.length >= 11) {
+      return (
+        <div> Too many matches, specify another filter</div>
+      )
+    }else if (countries.length > 1 && countries.length < 11) {
+      return (
+        <div>
+          {
+            countries.map(e => {
+              return (
+                <div key={e.name}>
+                  <Country country={e} countryDisp={countryDisp} showFlag={showFlag} />
+                </div>
+              )
+            })
+          }
+        </div>
+      )
+    }
+  }
 
-  useEffect(() => {
-    axios.get(url).then(response => {
-      setCountries(response.data)
-    })
-  })
-
-  return (
-    <div>
-      {
-        countries.length === 1 &&
-        <Country country={countries[0]} />
-      }
-      {
-        countries.length > 1 && countries.length < 11 &&
-        <div>{countries.map(e => <div>{e.name}</div>)}</div>
-      }
-      {
-        countries.length >= 11 &&
-        <div>too many matches specify another filter.</div>
-      }
-    </div>
-  )
+  return (<div></div>)
 }
-export { Result }
+
+export { Filter }
