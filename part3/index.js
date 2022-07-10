@@ -51,7 +51,7 @@ app.get('/api/persons/:id', (req, res) => {
 
 app.delete("/api/persons/:id", (request, response)=> {
     const id = Number(request.params.id)
-    entries = entries.filter( entry => entry.id !== id)
+    notes = notes.filter( entry => entry.id !== id)
     response.status(204).end()
 })
 
@@ -61,10 +61,17 @@ app.post("/api/persons", (request, response)=>{
     {
         return response.status(400).json({error:"name missing "})
     }
+
+    if ( notes.find(entry => entry.name === person.name) )
+    {
+            return response.status(400).json({error:"name must be unique"})
+
+    }
     person.id = Math.floor( Math.random() * 100000 )
-    entries.concat(person)
+    notes.concat(person)
     response.json(person)
 })
+
 
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`)

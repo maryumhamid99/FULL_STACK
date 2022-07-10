@@ -11,3 +11,11 @@ Content-Type: application/json
     "name": "Maryum Hamid",
     "number": "40-354-4561"
 }
+###
+POST http://localhost:3001/api/persons
+Content-Type: application/json
+
+{
+    "name": "Maryum Hamid",
+    "number": "40-354-4561"
+}
