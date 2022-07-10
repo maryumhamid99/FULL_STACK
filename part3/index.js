@@ -27,7 +27,13 @@ const notes = [
 ]
 
 app.get("/api/persons", (request, response)=>{
-    response.json(notes)
+    response.json(notes)`1`
+})
+
+app.get('/info', (req, res) => {
+    let date = new Date()
+    let msg = `<p>Phonebook has info for ${notes.length} people<\p> <p> ${date} <\p>`
+    res.send(msg)
 })
 
 app.listen(PORT, () => {
