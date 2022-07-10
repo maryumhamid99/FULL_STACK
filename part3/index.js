@@ -1,5 +1,6 @@
 const express = require('express')
 const app = express()
+app.use(express.json())
 
 const PORT = 3001
 
@@ -54,6 +55,16 @@ app.delete("/api/persons/:id", (request, response)=> {
     response.status(204).end()
 })
 
+app.post("/api/persons", (request, response)=>{
+    const person = request.body
+    if (!person.name) 
+    {
+        return response.status(400).json({error:"name missing "})
+    }
+    person.id = Math.floor( Math.random() * 100000 )
+    entries.concat(person)
+    response.json(person)
+})
 
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`)
