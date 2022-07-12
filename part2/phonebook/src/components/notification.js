@@ -1,6 +1,8 @@
+import React from "react";
+
 const Notification = ({ message, error }) => {
     if (message === null) {
-      return null
+      return <div>{message}</div>
     }
   
     if (error) {

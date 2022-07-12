@@ -2,12 +2,13 @@ import axios from "axios";
 
 const baseUrl = "http://localhost:3001/persons"
 
-const addEntry = newEntry => {
-    return axios.post(baseUrl, newEntry).then( response => response.data )
+const getAll = () => {
+
+    return axios.get(baseUrl)
 }
 
-const getAll = () => {
-    return axios.get(baseUrl).then(response => response.data)
+const addEntry = newEntry => {
+    return axios.post(baseUrl, newEntry).then( response => response.data )
 }
 
 const deleteEntry = (id) => {
@@ -22,5 +23,4 @@ const updateEntry = (id, person) => {
         .then(response => response.data)
         .catch( error => console.log("Failed to delete") )
 }
-const exports = {addEntry, getAll, deleteEntry,updateEntry}
-export default exports
+export default {addEntry, getAll, deleteEntry,updateEntry}
