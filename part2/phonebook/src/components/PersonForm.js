@@ -7,4 +7,4 @@ const PersonForm = ({newName, newNumber, addName, handleNameChange, handleNumber
         <div><button type="submit" onClick={addName}>add</button></div>
     </form>
 
-export default PersonForm 
+export default PersonForm

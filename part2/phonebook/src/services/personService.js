@@ -6,7 +6,6 @@ const getAll = () => {
 
     return axios.get(baseUrl)
 }
-
 const addEntry = newEntry => {
     return axios.post(baseUrl, newEntry).then( response => response.data )
 }

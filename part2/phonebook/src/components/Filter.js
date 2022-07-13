@@ -1,10 +1,6 @@
 import React from "react";
 
+const Filter = ({filter, changeHandler}) =>
+    <div>filter shown with <input value={filter} onChange={changeHandler}/></div>
 
-const Filter = ({filterName, handleFilterChange}) =>
-        <div>
-        filter shown with<input value={filterName} onChange={handleFilterChange}/>
-        </div>
-
-
-export default Filter 
+export default Filter
