@@ -1,11 +1,14 @@
 const express = require('express')
 const app = express()
 var morgan = require('morgan')
-app.use(express.json())
-morgan.token('request', req => JSON.stringify(req.body))
-const PORT = 3001
-app.use(morgan(':method :url :status :res[content-length] - :response-time ms :content' ))
+const cors = require('cors')
+const PORT = process.env.PORT || 3001
 
+app.use(cors())
+app.use(express.static('build'))
+app.use( express.json() ) 
+morgan.token('reqbody', req => JSON.stringify(req.body) ) 
+app.use( morgan(':method :url :status :res[content-length] - :response-time ms :reqbody') ) 
 
 const notes = [
     {
