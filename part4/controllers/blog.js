@@ -1,14 +1,17 @@
 require('express-async-errors')
 const Router = require('express').Router()
 const Blog = require('../models/blog')
+const User = require('../models/user')
+const jwt = require('jsonwebtoken')
+const middleware = require("../utils/middleware")
 
 Router.get('', async(request, response) => {
   const blogs = await Blog.find({}).populate('user', {username:1, name:1})
    response.json(blogs)
 })
-
-Router.post('', async(request, response) => {
-    if(!request.body.title)
+const user = request.user
+blogsRouter.post('/',middleware.userExtractor, async (request, response) => {
+  const decodedToken = jwt.verify(request.token, process.env.SECRET)    if(!request.body.title)
       response.status(400).json({ error: 'title is missing' })
     else if(!request.body.url)
     response.status(400).json({ error: 'url is missing' })
@@ -27,9 +30,19 @@ Router.post('', async(request, response) => {
     }
 })
 
-blogsRouter.delete('/:id', async (request, response) => {
+blogsRouter.delete('/:id',middleware.userExtractor, async (request, response) => {
+  const decodedToken = jwt.verify(request.token, process.env.SECRET)
+  if (!request.token || !decodedToken.id) {
+    return response.status(401).json({ error: 'token missing or invalid' })
+  }
+  const user = request.user
+  const blog = await Blog.findById(request.params.id)
 
-  if(await Blog.findById(request.params.id)){
+  if(blog.user.toString() !== user._id.toString()){
+    return response.status(401).json({error: 'Cannot be deleted '})
+  }
+
+  if(blog){
     await Blog.findByIdAndRemove(request.params.id)
     response.status(204).end()
   }

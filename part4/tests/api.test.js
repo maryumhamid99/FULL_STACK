@@ -32,12 +32,18 @@ test('id property of blogs is present', async () => {
     }
   })
 
-describe("Adding a blog", () => {
-
-})  
+  
 })
 describe("Posting a blog", () => {
 test('a blog without likes set likes to 0', async () => {
+    const addedUser = await api.post('/api/users')
+        .send({ name: 'asdqwe123123', username: 'asdqwe123123', password: 'asdqwe123123' });
+
+    const loggedUser = await api
+    .post("/api/login")
+    .send({ username: 'asdqwe123123', password: 'asdqwe123123' })
+    .expect(200)
+    .expect('Content-type', /application\/json/)
     const newBlog = {
         title: 'abc title',
         author: 'abc name',
@@ -47,6 +53,7 @@ test('a blog without likes set likes to 0', async () => {
     const response = await api
       .post('/api/blogs')
       .send(newBlog)
+      .set('Authorization',`bearer ${loggedUser.body.token}`)
       .expect(201)
       .expect('Content-Type', /application\/json/)
   
@@ -54,19 +61,15 @@ test('a blog without likes set likes to 0', async () => {
   
   })
 test('a valid blog can be added', async () => {
-    const newBlog = {
-      title: 'abc title',
-      author: 'abc name',
-      url: 'abcurl',
-      likes: 24
-    }
-  
-    await api
-      .post('/api/blogs')
-      .send(newBlog)
-      .expect(201)
-      .expect('Content-Type', /application\/json/)
-  
+    const addedUser = await api.post('/api/users')
+        .send({ name: 'asdqwe123123', username: 'asdqwe123123', password: 'asdqwe123123' });
+
+
+    const loggedUser = await api
+    .post("/api/login")
+    .send({ username: 'asdqwe123123', password: 'asdqwe123123' })
+    .expect(200)
+    .expect('Content-type', /application\/json/)
     const blogsAtEnd = await helper.blogsInDb()
   
     const contents = blogsAtEnd.map(blogt => blogt.title)
@@ -77,6 +80,14 @@ test('a valid blog can be added', async () => {
     )
   })
   test('blog without url not be be added', async () => {
+    const addedUser = await api.post('/api/users')
+        .send({ name: 'asdqwe123123', username: 'asdqwe123123', password: 'asdqwe123123' });
+
+    const loggedUser = await api
+    .post("/api/login")
+    .send({ username: 'asdqwe123123', password: 'asdqwe123123' })
+    .expect(200)
+    .expect('Content-type', /application\/json/)
     const newBlog = {
         title: 'abc title',
         author: 'abc name',
@@ -86,12 +97,21 @@ test('a valid blog can be added', async () => {
     const response = await api
       .post('/api/blogs')
       .send(newBlog)
+      .set('Authorization',`bearer ${loggedUser.body.token}`)
       .expect(400)
       .expect('Content-Type', /application\/json/)
   
   
   })
   test('blog without title not be be added', async () => {
+    const addedUser = await api.post('/api/users')
+        .send({ name: 'asdqwe123123', username: 'asdqwe123123', password: 'asdqwe123123' });
+
+    const loggedUser = await api
+    .post("/api/login")
+    .send({ username: 'asdqwe123123', password: 'asdqwe123123' })
+    .expect(200)
+    .expect('Content-type', /application\/json/)
     const newBlog = {
         author: 'abc name',
         url: 'abcurl',
@@ -101,6 +121,7 @@ test('a valid blog can be added', async () => {
     const response = await api
       .post('/api/blogs')
       .send(newBlog)
+      .set('Authorization',`bearer ${loggedUser.body.token}`)
       .expect(400)
       .expect('Content-Type', /application\/json/)
   
@@ -109,12 +130,35 @@ test('a valid blog can be added', async () => {
 })
 describe("Deleting a blog",  () => {
     test("Inserting and deleting a blog", async () => {
-      const idDelete = await helper.createNewNote()
-      await api
-        .delete(`/api/blogs/${idDelete}`)
-        .expect(204)
-    })
+        const addedUser = await api.post('/api/users')
+        .send({ name: 'test123456', username: 'test123456', password: 'test123456' });
+
+    const loggedUser = await api
+    .post("/api/login")
+    .send({ username: 'test123456', password: 'test123456' })
+    .expect(200)
+    .expect('Content-type', /application\/json/)
+
+    const newBlog = {
+      title: 'temp blog',
+      author: 'Buket Karakaş',
+      url: 'wwwwww',
+      likes: 85
+    }
+    let addedBlog = await api
+      .post('/api/blogs')
+      .send(newBlog)
+      .set('Authorization',`bearer ${loggedUser.body.token}`)
+      .expect(201)
+      .expect('Content-Type', /application\/json/)
+
+    console.log(typeof(addedBlog.body.id))
+    await api
+      .delete(`/api/blogs/${addedBlog.body.id}`)
+      .set('Authorization',`bearer ${loggedUser.body.token}`)
+      .expect(204)
   })
+})
   
   describe("Updating a blog ",  () => {
     test("with new like number and title", async () => {
