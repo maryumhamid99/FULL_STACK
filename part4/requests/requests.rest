@@ -11,3 +11,19 @@ Content-Type: application/json
     "url": "dfgdfgfgz",
     "likes": 10
 }
+###
+
+PUT http://localhost:3003/api/blogs/61ab6c34e62aebe95b3195a4
+Content-Type: application/json
+
+{
+    "title": "abc title",
+    "author": "abc author",
+    "url": "abcurl",
+    "likes": 100
+}
+###
+
+DELETE http://localhost:3003/api/blogs/61aa82a3ee8ba3e24f039bb5
+Content-Type: application/json
+
