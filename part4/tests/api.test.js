@@ -21,6 +21,24 @@ test('blogs are returned as json', async () => {
 
     expect(response.body).toHaveLength(helper.initialBlogs.length)
 })
+
+test('a blog without likes set likes to 0', async () => {
+    const newBlog = {
+        title: 'abc title',
+        author: 'abc name',
+        url: 'abcurl',
+    }
+  
+    const response = await api
+      .post('/api/blogs')
+      .send(newBlog)
+      .expect(201)
+      .expect('Content-Type', /application\/json/)
+  
+    expect(response.body.likes).toBe(0)
+  
+  })
+
 test('id property of blogs is present', async () => {
     const response = await api.get('/api/blogs')
     .expect(200)
