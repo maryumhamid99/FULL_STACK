@@ -15,6 +15,19 @@ const favoriteBlog = (blogs) => {
     return result
 }
 
+const mostBlogs = (blogs) => {
+    const authorObj = _.countBy(blogs, 'author')
+    let authArray = []
+    _.forIn(authorObj, function(value, key){
+        authArray=authArray.concat({
+            author: key,
+            blogs: value
+        })
+    })
+    authArray.sort((a1,a2) => a2.blogs - a1.blogs)
+    return authArray[0]
+}
+
 module.exports = {
-    dummy, countLikes,favoriteBlog
+    dummy, countLikes,favoriteBlog, mostBlogs
 }
