@@ -7,14 +7,16 @@ Router.get('', async(request, response) => {
   response.json(blogs)
 })
 
-Router.post('/', (request, response) => {
-    const blog = new Blog(request.body)
+Router.post('', async(request, response) => {
+    if(!request.body.title)
+      response.status(400).json({ error: 'title is missing' })
+    else if(!request.body.url)
+    response.status(400).json({ error: 'url is missing' })
 
-    blog
-        .save()
-        .then(result => {
-        response.status(201).json(result)
-        })
+    else{
+      const result = await (new Blog(request.body).save())
+      response.status(201).json(result)
+    }
 })
 
 module.exports = Router

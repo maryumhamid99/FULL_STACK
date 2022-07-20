@@ -73,6 +73,37 @@ test('a valid blog can be added', async () => {
   )
 })
 
+test('blog without title not be be added', async () => {
+    const newBlog = {
+        author: 'abc name',
+        url: 'abcurl',
+        likes: 24
+    }
+  
+    const response = await api
+      .post('/api/blogs')
+      .send(newBlog)
+      .expect(400)
+      .expect('Content-Type', /application\/json/)
+  
+  
+  })
+  
+  test('blog without url not be be added', async () => {
+    const newBlog = {
+        title: 'abc title',
+        author: 'abc name',
+        likes: 24
+    }
+  
+    const response = await api
+      .post('/api/blogs')
+      .send(newBlog)
+      .expect(400)
+      .expect('Content-Type', /application\/json/)
+  
+  
+  })
 
 
 afterAll(() => {
