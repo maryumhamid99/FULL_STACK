@@ -3,8 +3,8 @@ const Router = require('express').Router()
 const Blog = require('../models/blog')
 
 Router.get('', async(request, response) => {
-  const blogs = await Blog.find({})
-  response.json(blogs)
+  const blogs = await Blog.find({}).populate('user', {username:1, name:1})
+   response.json(blogs)
 })
 
 Router.post('', async(request, response) => {
@@ -14,7 +14,15 @@ Router.post('', async(request, response) => {
     response.status(400).json({ error: 'url is missing' })
 
     else{
-      const result = await (new Blog(request.body).save())
+      const user = await User.findById(request.body.user)
+      const blog = new Blog({
+        title: request.body.title,
+        author: request.body.author,
+        url: request.body.url,
+        likes: request.body.likes,
+        user: user._id
+      })
+      const result = await (blog).save()
       response.status(201).json(result)
     }
 })

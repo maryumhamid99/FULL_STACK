@@ -1,4 +1,5 @@
 const Blog = require("../models/blog")
+const User = require('../models/user')
 const initialBlogs = [
     {
         _id: "5a422aa71b54a676234d17f8",
@@ -50,25 +51,38 @@ const initialBlogs = [
     }   
   ]
 
-  const dBblogs = async () => {
+  const Dbblogs = async () => {
     const blogs = await Blog.find({})
     return blogs.map(blog => blog.toJSON())
   }
-
-  const newNote = async () => {
+  
+  const createNewNote = async () => {
     const newBlog = {
-        title: 'abc title',
-        author: 'abc name',
-        url: 'abcurl',
-        likes: 24
+        title: 'temp blog',
+        author: 'Buket Karakaş',
+        url: 'wwwwww',
+        likes: 85
       }
-    await (new Blog(newBlog)).save()
-
-    return ((new Blog(newBlog))._id.toString())
+    const blog = new Blog(newBlog)
+    await blog.save()
+  
+    return blog._id.toString()
   }
-
-  module.exports = {
-      initialBlogs,
-      dBblogs,
-      newNote
+  
+  
+  const Dbusers = async () => {
+    const users = await User.find({})
+    return users.map(u => u.toJSON())
   }
+  
+  
+  
+  
+module.exports = {
+    initialBlogs,
+    dBblogs,
+    createNewNote,
+    createNewNote,
+    Dbusers
+}
+
